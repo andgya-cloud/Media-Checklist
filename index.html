@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freedom Church — Media Team Service Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#071F12;
+    --navy:#0C2A1A;
+    --navy-panel:#113524;
+    --navy-line:#1F5236;
+    --gold:#3FAE6A;
+    --gold-bright:#8FE3A8;
+    --gold-soft:rgba(63,174,106,.16);
+    --cream:#EEF7EF;
+    --cream-dim:#A9C6B2;
+    --green:#4CC38A;
+    --glass:rgba(255,255,255,.07);
+    --glass-strong:rgba(255,255,255,.11);
+    --glass-border:rgba(255,255,255,.16);
+    --glass-highlight:rgba(255,255,255,.28);
+    --radius:20px;
+    --font-display:'Marcellus', serif;
+    --font-body:'Outfit', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:var(--font-body);
+    background:linear-gradient(160deg,#06170D 0%,#0A2A17 45%,#0E3B20 100%);
+    background-attachment:fixed;
+    color:var(--cream);
+    min-height:100vh;
+    padding-bottom:80px;
+    position:relative;
+    overflow-x:hidden;
+  }
+  /* Ambient orbs the glass blurs against */
+  .orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+  .orb-1{width:520px;height:520px;top:-140px;right:-120px;background:rgba(63,174,106,.34)}
+  .orb-2{width:420px;height:420px;bottom:-160px;left:-140px;background:rgba(143,227,168,.20)}
+  .orb-3{width:340px;height:340px;top:42%;left:56%;background:rgba(46,142,86,.24)}
+  .wrap, header, footer{position:relative;z-index:1}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
+
+  /* ---------- Header ---------- */
+  header{
+    border-bottom:1px solid var(--glass-border);
+    background:rgba(255,255,255,.04);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    padding:34px 0 26px;
+    margin-bottom:26px;
+  }
+  .eyebrow{
+    font-size:12px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--gold);font-weight:600;margin-bottom:10px;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-size:clamp(28px,4.5vw,42px);
+    font-weight:400;line-height:1.15;
+    color:var(--cream);
+  }
+  h1 em{font-style:normal;color:var(--gold-bright)}
+  .verse{
+    margin-top:10px;color:var(--cream-dim);font-size:14px;font-weight:300;
+    max-width:560px;line-height:1.55;
+  }
+  .verse span{color:var(--gold);font-weight:500}
+
+  /* ---------- Service details ---------- */
+  .service-bar{
+    display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:14px;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    border-top-color:var(--glass-highlight);
+    backdrop-filter:blur(18px) saturate(150%);
+    -webkit-backdrop-filter:blur(18px) saturate(150%);
+    border-radius:var(--radius);
+    box-shadow:0 8px 32px rgba(3,14,8,.35);
+    padding:18px;margin-bottom:26px;
+  }
+  .field label{
+    display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:7px;font-weight:600;
+  }
+  .field input, .field select{
+    width:100%;background:rgba(255,255,255,.08);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    border-radius:10px;color:var(--cream);padding:10px 12px;font-size:14px;
+    font-family:var(--font-body);
+  }
+  .field input:focus, .field select:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold)}
+  .field input::placeholder{color:#6E8F79}
+
+  /* ---------- Overall readiness ---------- */
+  .readiness{
+    display:flex;align-items:center;gap:18px;
+    background:linear-gradient(90deg, rgba(63,174,106,.20), rgba(255,255,255,.05) 70%);
+    border:1px solid var(--glass-border);
+    border-top-color:var(--glass-highlight);
+    border-left:3px solid var(--gold);
+    backdrop-filter:blur(18px) saturate(150%);
+    -webkit-backdrop-filter:blur(18px) saturate(150%);
+    border-radius:var(--radius);
+    box-shadow:0 8px 32px rgba(3,14,8,.35);
+    padding:16px 20px;margin-bottom:26px;
+  }
+  .readiness .pct{
+    font-family:var(--font-display);font-size:34px;color:var(--gold-bright);
+    min-width:92px;
+  }
+  .readiness .meta{flex:1}
+  .readiness .meta strong{display:block;font-size:15px;font-weight:600;margin-bottom:6px}
+  .track{height:6px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
+  .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));border-radius:99px;transition:width .4s ease}
+
+  /* ---------- Tabs ---------- */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .tab{
+    display:flex;align-items:center;gap:10px;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    border-top-color:var(--glass-highlight);
+    backdrop-filter:blur(14px) saturate(150%);
+    -webkit-backdrop-filter:blur(14px) saturate(150%);
+    color:var(--cream-dim);border-radius:99px;
+    padding:9px 16px 9px 10px;cursor:pointer;
+    box-shadow:0 4px 16px rgba(3,14,8,.25);
+    font-family:var(--font-body);font-size:14px;font-weight:500;
+    transition:all .2s ease;
+  }
+  .tab:hover{border-color:var(--gold);color:var(--cream)}
+    .tab.active{
+    background:linear-gradient(135deg, rgba(63,174,106,.85), rgba(143,227,168,.75));
+    color:var(--navy-deep);border-color:rgba(255,255,255,.35);font-weight:600;
+    box-shadow:0 6px 24px rgba(63,174,106,.4);
+  }
+  .tab.active .ring text{fill:var(--navy-deep)}
+  .ring{width:30px;height:30px;flex:none}
+  .ring circle{fill:none;stroke-width:3}
+  .ring .bg{stroke:rgba(255,255,255,.15)}
+  .tab.active .ring .bg{stroke:rgba(7,31,18,.25)}
+  .ring .prog{stroke:var(--gold-bright);stroke-linecap:round;transition:stroke-dashoffset .4s ease}
+  .tab.active .ring .prog{stroke:var(--navy-deep)}
+  .ring text{font-size:9px;font-weight:700;fill:var(--gold-bright);font-family:var(--font-body)}
+
+  /* ---------- Department panel ---------- */
+  .dept{display:none}
+  .dept.active{display:block;animation:rise .3s ease}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .dept-head{
+    display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
+    margin-bottom:18px;flex-wrap:wrap;
+  }
+  .dept-head h2{
+    font-family:var(--font-display);font-weight:400;font-size:26px;
+  }
+  .dept-head .lead{color:var(--cream-dim);font-size:13px;margin-top:4px}
+  .dept-head .lead b{color:var(--gold-bright);font-weight:600}
+
+  .section{
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    border-top-color:var(--glass-highlight);
+    backdrop-filter:blur(20px) saturate(150%);
+    -webkit-backdrop-filter:blur(20px) saturate(150%);
+    border-radius:var(--radius);
+    box-shadow:0 8px 32px rgba(3,14,8,.35);
+    margin-bottom:16px;overflow:hidden;
+  }
+  .section-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 18px;border-bottom:1px solid var(--glass-border);
+    background:rgba(255,255,255,.05);
+  }
+  .section-head h3{
+    font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold);font-weight:600;
+  }
+  .section-head .count{font-size:12px;color:var(--cream-dim)}
+  .items{padding:8px 10px}
+
+  .item{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:11px 10px;border-radius:9px;cursor:pointer;
+    transition:background .15s ease;
+  }
+  .item:hover{background:rgba(255,255,255,.07)}
+  .item input{position:absolute;opacity:0;pointer-events:none}
+  .box{
+    width:21px;height:21px;flex:none;margin-top:1px;
+    background:rgba(255,255,255,.08);
+    border:1.5px solid var(--glass-border);border-radius:7px;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .18s ease;
+  }
+  .box svg{width:12px;height:12px;opacity:0;transform:scale(.5);transition:all .18s ease}
+  .item.done .box{background:linear-gradient(135deg,var(--gold),var(--gold-bright));border-color:rgba(255,255,255,.4);box-shadow:0 2px 10px rgba(63,174,106,.45)}
+  .item.done .box svg{opacity:1;transform:scale(1)}
+  .item .txt{font-size:14.5px;line-height:1.5;color:var(--cream);font-weight:300}
+  .item.done .txt{color:var(--cream-dim);text-decoration:line-through;text-decoration-color:rgba(63,174,106,.55)}
+  .item:focus-within{outline:2px solid var(--gold);outline-offset:2px}
+
+  /* ---------- Actions ---------- */
+  .actions{
+    display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+    margin:20px 0 40px;
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--font-body);font-size:14px;font-weight:600;
+    border-radius:10px;padding:13px 22px;cursor:pointer;border:none;
+    transition:all .2s ease;
+  }
+  .btn-gold{
+    background:linear-gradient(135deg, rgba(63,174,106,.9), rgba(143,227,168,.85));
+    border:1px solid rgba(255,255,255,.35);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    color:var(--navy-deep);
+    box-shadow:0 4px 18px rgba(63,174,106,.4), inset 0 1px 0 rgba(255,255,255,.45);
+  }
+  .btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(63,174,106,.5)}
+  .btn-ghost{
+    background:var(--glass);border:1px solid var(--glass-border);color:var(--cream-dim);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .btn-ghost:hover{border-color:var(--gold);color:var(--cream)}
+  .btn:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+  .hint{font-size:12px;color:#6E8F79;flex-basis:100%}
+
+  footer{
+    border-top:1px solid var(--glass-border);
+    background:rgba(255,255,255,.04);
+    backdrop-filter:blur(12px) saturate(140%);
+    -webkit-backdrop-filter:blur(12px) saturate(140%);
+    padding:22px 0;text-align:center;
+    color:#6E8F79;font-size:12.5px;letter-spacing:.06em;
+  }
+  footer b{color:var(--gold)}
+
+  @media (max-width:720px){
+    .service-bar{grid-template-columns:1fr}
+    .readiness{flex-direction:column;align-items:flex-start;gap:10px}
+    .readiness .meta{width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Freedom Church &middot; Media Ministry</div>
+    <h1>Sunday Service <em>Readiness Checklist</em></h1>
+    <p class="verse"><span>&ldquo;Let all things be done decently and in order.&rdquo;</span> — 1 Corinthians 14:40. Excellence and punctuality in every department, every service.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- Service details -->
+  <div class="service-bar">
+    <div class="field">
+      <label for="svcDate">Service date</label>
+      <input type="date" id="svcDate">
+    </div>
+    <div class="field">
+      <label for="memberName">Team member on duty</label>
+      <input type="text" id="memberName" placeholder="Your full name">
+    </div>
+    <div class="field">
+      <label for="reportEmail">Send report to</label>
+      <input type="email" id="reportEmail" placeholder="mediateam@freedomchurch.org">
+    </div>
+  </div>
+
+  <!-- Overall readiness -->
+  <div class="readiness">
+    <div class="pct" id="overallPct">0%</div>
+    <div class="meta">
+      <strong>Overall service readiness — all four departments</strong>
+      <div class="track"><div class="fill" id="overallFill"></div></div>
+    </div>
+  </div>
+
+  <!-- Department tabs -->
+  <div class="tabs" id="tabs" role="tablist"></div>
+
+  <!-- Department panels -->
+  <div id="panels"></div>
+
+</div>
+
+<footer>
+  <div class="wrap">Freedom Church Media Ministry &middot; <b>Serving with excellence</b> &middot; Camera &middot; Presentation &middot; Streaming &middot; Sound</div>
+</footer>
+
+<script>
+const DEPARTMENTS = [
+  {
+    id:"camera",
+    name:"Camera Crew",
+    lead:"Report time: 90 minutes before service",
+    sections:[
+      {title:"Punctuality & preparation", items:[
+        "Arrive and sign in 90 minutes before service start",
+        "Attend media team prayer and briefing",
+        "Collect camera kit; confirm all batteries fully charged",
+        "Spare batteries and formatted memory cards on hand",
+        "Lenses cleaned; sensors checked for dust"
+      ]},
+      {title:"Setup & technical checks", items:[
+        "White balance and exposure set for stage lighting",
+        "Frame and focus test: pulpit, worship team, and wide shot",
+        "Tripods and gimbals locked, levelled, and stable",
+        "Comms headset tested with the video director",
+        "Cable runs taped down and clear of walkways",
+        "Tally lights / camera numbering confirmed with switcher"
+      ]},
+      {title:"During the service", items:[
+        "Hold assigned shots and respond to director's calls",
+        "Anticipate service flow — worship, sermon, altar call",
+        "Maintain steady framing through all transitions",
+        "Capture congregation cutaways respectfully",
+        "Stay at position; hand over properly if relieved"
+      ]},
+      {title:"After the service", items:[
+        "Offload and back up all footage to the media drive",
+        "Label files with date and service name",
+        "Put batteries on charge; cap lenses and store gear",
+        "Log any faulty or damaged equipment for repair",
+        "Leave camera positions tidy and sign out"
+      ]}
+    ]
+  },
+  {
+    id:"presentation",
+    name:"Presentation Crew",
+    lead:"Report time: 90 minutes before service",
+    sections:[
+      {title:"Punctuality & preparation", items:[
+        "Arrive and sign in 90 minutes before service start",
+        "Attend media team prayer and briefing",
+        "Confirm final song list received from worship leader",
+        "Confirm sermon title, scriptures, and preacher's slides received"
+      ]},
+      {title:"Content & proofing", items:[
+        "Load worship set and proof every lyric against the final list",
+        "Sermon scriptures loaded in the correct translation",
+        "Announcement slides updated — check names, dates, and venues",
+        "Spelling and grammar proofread on every slide",
+        "Backup copy of today's presentation file saved"
+      ]},
+      {title:"Setup & technical checks", items:[
+        "Test output to main screens, stage display, and livestream feed",
+        "Confidence monitor / stage display showing correctly",
+        "Remote clicker paired and tested with the preacher",
+        "Pre-service announcement loop running before doors open"
+      ]},
+      {title:"During the service", items:[
+        "Advance lyrics ahead of the vocalist — never behind",
+        "Display scriptures promptly as the preacher reads",
+        "Blank or logo screen during prayer moments as directed",
+        "Stay alert for spontaneous songs or scripture references"
+      ]},
+      {title:"After the service", items:[
+        "Save the final version and archive today's service file",
+        "Note any corrections needed for next week",
+        "Shut down machines properly and sign out"
+      ]}
+    ]
+  },
+  {
+    id:"streaming",
+    name:"Streaming Crew",
+    lead:"Report time: 90 minutes before service · Go live 15 minutes early",
+    sections:[
+      {title:"Punctuality & preparation", items:[
+        "Arrive and sign in 90 minutes before service start",
+        "Attend media team prayer and briefing",
+        "Run internet speed test — upload of at least 10 Mbps recorded",
+        "Backup phone hotspot charged and ready"
+      ]},
+      {title:"Setup & technical checks", items:[
+        "Encoder / OBS / switcher powered on; all scenes verified",
+        "Stream title, description, and thumbnail updated for today",
+        "Audio feed from the sound desk tested — clean levels, no hum",
+        "Lower thirds and stream graphics loaded",
+        "YouTube and Facebook events scheduled and linked",
+        "Recording storage checked — enough free space"
+      ]},
+      {title:"Going live & during service", items:[
+        "Start the stream with countdown 15 minutes before service",
+        "Monitor stream health — bitrate, dropped frames, buffering",
+        "Confirm audio and video sync every 15 minutes",
+        "Switch scenes in step with the service flow",
+        "Welcome online congregation and respond to comments",
+        "Post giving and connect links in the chat"
+      ]},
+      {title:"After the service", items:[
+        "End the stream after the benediction and closing",
+        "Verify the recording saved; trim and publish the replay",
+        "Note peak viewers and engagement for the weekly report",
+        "Report any drops or technical issues, then sign out"
+      ]}
+    ]
+  },
+  {
+    id:"sound",
+    name:"Sound Team",
+    lead:"Report time: 2 hours before service — first team in",
+    sections:[
+      {title:"Punctuality & preparation", items:[
+        "Arrive and sign in 2 hours before service start",
+        "Attend media team prayer and briefing",
+        "Power up the system in order: desk → processors → amplifiers",
+        "Fresh batteries in all wireless mics; spares at the desk"
+      ]},
+      {title:"Soundcheck & technical checks", items:[
+        "Line check every input — mics, instruments, and playback",
+        "Full soundcheck with the worship team completed",
+        "Monitor mixes set to each musician's request",
+        "Pastor's microphone checked and gain properly set",
+        "Front-of-house levels safe — peaks kept at or under 95 dB",
+        "Clean audio feed to the streaming desk confirmed",
+        "Recording channels armed if multitrack is needed"
+      ]},
+      {title:"During the service", items:[
+        "Ride vocal levels attentively through worship",
+        "Strict mute and unmute discipline between segments",
+        "Watch for feedback and correct EQ immediately",
+        "Monitor stage requests via comms",
+        "Keep speech clear and intelligible during preaching"
+      ]},
+      {title:"After the service", items:[
+        "Power down in reverse order — amplifiers first",
+        "Collect, wipe, and store all mics; remove batteries",
+        "Coil and rack all cables neatly",
+        "Save the desk scene and log any faults",
+        "Sign out once the booth is tidy"
+      ]}
+    ]
+  }
+];
+
+const state = {}; // deptId -> array of booleans (flat)
+let activeDept = DEPARTMENTS[0].id;
+
+const CHECK_SVG = '<svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5l3.5 3.5 7-8" stroke="#071F12" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function totalItems(dept){ return dept.sections.reduce((n,s)=>n+s.items.length,0); }
+
+function build(){
+  const tabs = document.getElementById('tabs');
+  const panels = document.getElementById('panels');
+
+  DEPARTMENTS.forEach((dept, di)=>{
+    state[dept.id] = new Array(totalItems(dept)).fill(false);
+
+    // Tab with progress ring
+    const tab = document.createElement('button');
+    tab.className = 'tab' + (di===0 ? ' active':'');
+    tab.setAttribute('role','tab');
+    tab.dataset.dept = dept.id;
+    tab.innerHTML = `
+      <svg class="ring" viewBox="0 0 36 36" aria-hidden="true">
+        <circle class="bg" cx="18" cy="18" r="15"></circle>
+        <circle class="prog" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2" transform="rotate(-90 18 18)"></circle>
+        <text x="18" y="21.5" text-anchor="middle">0</text>
+      </svg>
+      ${dept.name}`;
+    tab.addEventListener('click', ()=>switchDept(dept.id));
+    tabs.appendChild(tab);
+
+    // Panel
+    const panel = document.createElement('div');
+    panel.className = 'dept' + (di===0 ? ' active':'');
+    panel.id = 'panel-' + dept.id;
+
+    let flat = 0;
+    let html = `
+      <div class="dept-head">
+        <div>
+          <h2>${dept.name}</h2>
+          <div class="lead"><b>${dept.lead}</b></div>
+        </div>
+      </div>`;
+
+    dept.sections.forEach((sec, si)=>{
+      html += `<div class="section">
+        <div class="section-head">
+          <h3>${sec.title}</h3>
+          <span class="count" id="count-${dept.id}-${si}">0 / ${sec.items.length}</span>
+        </div>
+        <div class="items">`;
+      sec.items.forEach(item=>{
+        const idx = flat++;
+        html += `
+          <label class="item" data-dept="${dept.id}" data-idx="${idx}" data-sec="${si}">
+            <input type="checkbox" aria-label="${item.replace(/"/g,'&quot;')}">
+            <span class="box">${CHECK_SVG}</span>
+            <span class="txt">${item}</span>
+          </label>`;
+      });
+      html += `</div></div>`;
+    });
+
+    html += `
+      <div class="actions">
+        <button class="btn btn-gold" data-send="${dept.id}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          Send ${dept.name} report to email
+        </button>
+        <button class="btn btn-ghost" data-reset="${dept.id}">Reset this checklist</button>
+        <span class="hint">The report opens in your email app with every item marked done or pending, ready to send.</span>
+      </div>`;
+
+    panel.innerHTML = html;
+    panels.appendChild(panel);
+  });
+
+  // Delegated events
+  document.getElementById('panels').addEventListener('change', e=>{
+    const label = e.target.closest('.item');
+    if(!label) return;
+    const dept = label.dataset.dept, idx = +label.dataset.idx;
+    state[dept][idx] = e.target.checked;
+    label.classList.toggle('done', e.target.checked);
+    refresh(dept);
+  });
+  document.getElementById('panels').addEventListener('click', e=>{
+    const send = e.target.closest('[data-send]');
+    if(send){ sendReport(send.dataset.send); return; }
+    const reset = e.target.closest('[data-reset]');
+    if(reset){ resetDept(reset.dataset.reset); }
+  });
+
+  // Default date = today
+  document.getElementById('svcDate').valueAsDate = new Date();
+  DEPARTMENTS.forEach(d=>refresh(d.id));
+}
+
+function switchDept(id){
+  activeDept = id;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.dept===id));
+  document.querySelectorAll('.dept').forEach(p=>p.classList.toggle('active', p.id==='panel-'+id));
+}
+
+function refresh(deptId){
+  const dept = DEPARTMENTS.find(d=>d.id===deptId);
+  const done = state[deptId].filter(Boolean).length;
+  const total = state[deptId].length;
+  const pct = total ? Math.round(done/total*100) : 0;
+
+  // Tab ring
+  const tab = document.querySelector(`.tab[data-dept="${deptId}"]`);
+  const circ = 94.2;
+  tab.querySelector('.prog').style.strokeDashoffset = circ - (circ*pct/100);
+  tab.querySelector('text').textContent = pct;
+
+  // Section counts
+  let flat = 0;
+  dept.sections.forEach((sec, si)=>{
+    const secDone = sec.items.reduce((n,_,i)=> n + (state[deptId][flat+i]?1:0), 0);
+    flat += sec.items.length;
+    const el = document.getElementById(`count-${deptId}-${si}`);
+    if(el) el.textContent = `${secDone} / ${sec.items.length}`;
+  });
+
+  // Overall
+  let allDone=0, allTotal=0;
+  DEPARTMENTS.forEach(d=>{ allDone += state[d.id].filter(Boolean).length; allTotal += state[d.id].length; });
+  const overall = allTotal ? Math.round(allDone/allTotal*100) : 0;
+  document.getElementById('overallPct').textContent = overall + '%';
+  document.getElementById('overallFill').style.width = overall + '%';
+}
+
+function resetDept(deptId){
+  state[deptId] = state[deptId].map(()=>false);
+  document.querySelectorAll(`#panel-${deptId} .item`).forEach(l=>{
+    l.classList.remove('done');
+    l.querySelector('input').checked = false;
+  });
+  refresh(deptId);
+}
+
+function sendReport(deptId){
+  const dept = DEPARTMENTS.find(d=>d.id===deptId);
+  const dateVal = document.getElementById('svcDate').value;
+  const dateStr = dateVal ? new Date(dateVal+'T00:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '(date not set)';
+  const name = document.getElementById('memberName').value.trim() || '(name not entered)';
+  const to = document.getElementById('reportEmail').value.trim();
+
+  const done = state[deptId].filter(Boolean).length;
+  const total = state[deptId].length;
+  const pct = Math.round(done/total*100);
+
+  let body = '';
+  body += 'FREEDOM CHURCH — MEDIA MINISTRY REPORT\n';
+  body += '========================================\n';
+  body += 'Department : ' + dept.name + '\n';
+  body += 'Service    : ' + dateStr + '\n';
+  body += 'On duty    : ' + name + '\n';
+  body += 'Readiness  : ' + done + ' of ' + total + ' items (' + pct + '%)\n';
+  body += '========================================\n\n';
+
+  let flat = 0;
+  dept.sections.forEach(sec=>{
+    body += sec.title.toUpperCase() + '\n';
+    sec.items.forEach(item=>{
+      body += (state[deptId][flat] ? '  [DONE]    ' : '  [PENDING] ') + item + '\n';
+      flat++;
+    });
+    body += '\n';
+  });
+
+  const pending = total - done;
+  body += pending === 0
+    ? 'All items complete. ' + dept.name + ' is ready for service. To God be the glory!\n'
+    : 'ATTENTION: ' + pending + ' item(s) still pending before service.\n';
+  body += '\n— Sent from the Freedom Church Media Team Checklist';
+
+  const subject = 'Media Report — ' + dept.name + ' — ' + dateStr + ' (' + pct + '% ready)';
+  const href = 'mailto:' + encodeURIComponent(to) +
+    '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(body);
+  window.location.href = href;
+}
+
+build();
+</script>
+</body>
+</html>
