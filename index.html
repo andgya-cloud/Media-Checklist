@@ -252,6 +252,76 @@
     .readiness{flex-direction:column;align-items:flex-start;gap:10px}
     .readiness .meta{width:100%}
   }
+  /* ---------- Lock screen ---------- */
+  .lock{
+    position:fixed;inset:0;z-index:50;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,#06170D 0%,#0A2A17 45%,#0E3B20 100%);
+    padding:20px;
+  }
+  .lock::before,.lock::after{
+    content:"";position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;
+  }
+  .lock::before{width:520px;height:520px;top:-140px;right:-120px;background:rgba(63,174,106,.34)}
+  .lock::after{width:420px;height:420px;bottom:-160px;left:-140px;background:rgba(143,227,168,.20)}
+  .lock-card{
+    position:relative;z-index:1;width:100%;max-width:400px;
+    background:var(--glass-strong);
+    border:1px solid var(--glass-border);
+    border-top-color:var(--glass-highlight);
+    backdrop-filter:blur(22px) saturate(150%);
+    -webkit-backdrop-filter:blur(22px) saturate(150%);
+    border-radius:24px;
+    box-shadow:0 16px 48px rgba(3,14,8,.5);
+    padding:38px 32px;text-align:center;
+  }
+  .lock-icon{
+    width:58px;height:58px;margin:0 auto 18px;border-radius:16px;
+    background:linear-gradient(135deg, rgba(63,174,106,.9), rgba(143,227,168,.85));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 24px rgba(63,174,106,.4), inset 0 1px 0 rgba(255,255,255,.45);
+  }
+  .lock-card h2{font-family:var(--font-display);font-weight:400;font-size:24px;margin-bottom:6px}
+  .lock-card .sub{color:var(--cream-dim);font-size:13.5px;font-weight:300;margin-bottom:24px;line-height:1.5}
+  .lock-card input{
+    width:100%;background:rgba(255,255,255,.09);
+    border:1px solid var(--glass-border);border-radius:10px;
+    color:var(--cream);padding:13px 14px;font-size:15px;
+    font-family:var(--font-body);text-align:center;letter-spacing:.12em;
+    margin-bottom:14px;
+  }
+  .lock-card input:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+  .lock-card input::placeholder{color:#6E8F79;letter-spacing:normal}
+  .lock-card .btn{width:100%;justify-content:center}
+  .lock-error{
+    color:#F0A9A9;font-size:13px;min-height:18px;margin-bottom:10px;
+    opacity:0;transition:opacity .2s ease;
+  }
+  .lock-error.show{opacity:1}
+  .lock-card.shake{animation:shake .4s ease}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%,60%{transform:translateX(-9px)}
+    40%,80%{transform:translateX(9px)}
+  }
+  .lock-foot{margin-top:20px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6E8F79}
+  body.locked{overflow:hidden}
+  body.locked .app-shell{filter:blur(6px);pointer-events:none;user-select:none}
+
+  /* ---------- Logout button ---------- */
+  .header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+  .btn-logout{
+    display:inline-flex;align-items:center;gap:8px;flex:none;
+    background:var(--glass);border:1px solid var(--glass-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    color:var(--cream-dim);border-radius:10px;
+    padding:10px 16px;font-family:var(--font-body);
+    font-size:13px;font-weight:600;cursor:pointer;
+    transition:all .2s ease;
+  }
+  .btn-logout:hover{border-color:var(--gold);color:var(--cream)}
+  .btn-logout:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+
   @media (prefers-reduced-motion:reduce){
     *{transition:none!important;animation:none!important}
   }
@@ -259,14 +329,44 @@
 </head>
 <body>
 
+<!-- Lock screen -->
+<div class="lock" id="lockScreen">
+  <div class="lock-card" id="lockCard">
+    <div class="lock-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#071F12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+    <h2>Media Team Access</h2>
+    <p class="sub">This checklist is for Freedom Church media team members. Enter the team password to continue.</p>
+    <input type="password" id="lockInput" placeholder="Enter team password" autocomplete="off">
+    <div class="lock-error" id="lockError">Incorrect password. Please try again.</div>
+    <button class="btn btn-gold" id="lockBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Unlock checklist
+    </button>
+    <div class="lock-foot">Freedom Church &middot; Media Ministry</div>
+  </div>
+</div>
+
+<div class="app-shell">
+
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
 
 <header>
   <div class="wrap">
-    <div class="eyebrow">Freedom Church &middot; Media Ministry</div>
-    <h1>Sunday Service <em>Readiness Checklist</em></h1>
+    <div class="header-row">
+      <div>
+        <div class="eyebrow">Freedom Church &middot; Media Ministry</div>
+        <h1>Sunday Service <em>Readiness Checklist</em></h1>
+      </div>
+      <button class="btn-logout" id="logoutBtn" title="Lock the checklist">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log out
+      </button>
+    </div>
     <p class="verse"><span>&ldquo;Let all things be done decently and in order.&rdquo;</span> — 1 Corinthians 14:40. Excellence and punctuality in every department, every service.</p>
   </div>
 </header>
@@ -309,6 +409,8 @@
 <footer>
   <div class="wrap">Freedom Church Media Ministry &middot; <b>Serving with excellence</b> &middot; Camera &middot; Presentation &middot; Streaming &middot; Sound</div>
 </footer>
+
+</div><!-- /app-shell -->
 
 <script>
 const DEPARTMENTS = [
@@ -643,6 +745,43 @@ function sendReport(deptId){
 }
 
 build();
+
+// ---------- Password lock ----------
+const TEAM_PASSWORD = 'Freedom2026';
+const lockScreen = document.getElementById('lockScreen');
+const lockCard   = document.getElementById('lockCard');
+const lockInput  = document.getElementById('lockInput');
+const lockError  = document.getElementById('lockError');
+
+document.body.classList.add('locked');
+setTimeout(()=>lockInput.focus(), 100);
+
+function tryUnlock(){
+  if(lockInput.value === TEAM_PASSWORD){
+    lockScreen.style.display = 'none';
+    document.body.classList.remove('locked');
+    lockError.classList.remove('show');
+    lockInput.value = '';
+  } else {
+    lockError.classList.add('show');
+    lockCard.classList.remove('shake');
+    void lockCard.offsetWidth; // restart animation
+    lockCard.classList.add('shake');
+    lockInput.select();
+  }
+}
+document.getElementById('lockBtn').addEventListener('click', tryUnlock);
+lockInput.addEventListener('keydown', e=>{ if(e.key==='Enter') tryUnlock(); });
+
+// ---------- Log out ----------
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  lockScreen.style.display = 'flex';
+  document.body.classList.add('locked');
+  lockInput.value = '';
+  lockError.classList.remove('show');
+  setTimeout(()=>lockInput.focus(), 100);
+  window.scrollTo(0,0);
+});
 </script>
 </body>
 </html>
